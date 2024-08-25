@@ -50,11 +50,19 @@ export class WishesService {
     return wish;
   }
 
-  async update(id: number, updateWishDto: UpdateWishDto): Promise<Wish> {
+  async update(
+    id: number,
+    updateWishDto: UpdateWishDto,
+    user: { id: number },
+  ): Promise<Wish> {
     const wish = await this.findOne(id);
 
     if (updateWishDto.price && wish.offers.length > 0) {
       throw new BadRequestException('Невозможно изменить цену');
+    }
+
+    if (wish.owner.id !== user.id) {
+      throw new BadRequestException('Вы не можете обновить чужой подарок');
     }
 
     await this.wishRepository.update(id, updateWishDto);
