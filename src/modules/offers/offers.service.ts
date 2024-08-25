@@ -33,9 +33,13 @@ export class OffersService {
       );
     }
 
-    await this.wishesService.update(createOfferDto.itemId, {
-      raised: donation,
-    } as UpdateWishDto);
+    await this.wishesService.update(
+      createOfferDto.itemId,
+      {
+        raised: donation,
+      } as UpdateWishDto,
+      user,
+    );
 
     return this.offerRepository.save({ ...createOfferDto, user, item: wish });
   }
